@@ -1,5 +1,5 @@
 import mongoose, { Mongoose } from "mongoose";
-const mongodbURL = process.env.MONGODB_URI;
+const MONGODB_URI = process.env.MONGODB_URI;
 interface MongooseConnection {
   conn: Mongoose | null;
   promise: Promise<Mongoose> | null;
@@ -13,12 +13,13 @@ if (!cached) {
 }
 export const ConnectToDB=async()=>{
     if(cached.conn) return cached.conn;
-    if(!mongodbURL) throw new Error("Missing MongoDB url");
-    cached.promise= cached.promise || mongoose.connect(mongodbURL,{
+    if(!MONGODB_URI) throw new Error("Missing MongoDB url");
+    cached.promise= cached.promise || mongoose.connect(MONGODB_URI,{
       dbName:'image_master',
       bufferCommands:false,
     })
     cached.conn=await cached.promise;
+    console.log("cached.conn")
     return cached.conn;
     
 }
